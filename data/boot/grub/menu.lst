@@ -1,0 +1,4 @@
+timeout 1
+title kernel
+	kernel /k.elf
+

@@ -1,4 +1,6 @@
 *.o
 hd.img
 k.elf
+*.rlib
+*.d
 

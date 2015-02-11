@@ -1,27 +1,32 @@
 ENTRY(start)
+OUTPUT_FORMAT(elf32-i386)
 SECTIONS
 {
-    .text 0x100000 :
+	. = 0x100000;
+	. += SIZEOF_HEADERS;
+	.multiboot : AT(ADDR(.multiboot)) {
+		KEEP( *(.multiboot) )
+	}
+    .text :
     {
-		*(.boot)
 		code = .; _code = .; __code = .;
 		kernel_start = .;
-		*(.text)
+		*(.text .text.*)
 		. = ALIGN(4096);
     }
 
     .data :
     {
         data = .; _data = .; __data = .;
-        *(.data)
-        *(.rodata)
+        *(.data .data.*)
+        *(.rodata .rodata.*)
         . = ALIGN(4096);
     }
 
     .bss :
     {
         bss = .; _bss = .; __bss = .;
-        *(.bss)
+        *(.bss .bss.*)
         . = ALIGN(4096);
     }
     end = .; _end = .; __end = .;

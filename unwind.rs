@@ -16,7 +16,7 @@ use prelude::*;
 pub fn rust_begin_unwind(args: ::core::fmt::Arguments, file: &str, line: usize) -> !
 {
 	// 'args' will print to the formatted string passed to panic!
-	log!("file='{}', line={} :: {}", file, line, args);
+	//log!("file='{}', line={} :: {}", file, line, args);
 	loop {}
 }
 

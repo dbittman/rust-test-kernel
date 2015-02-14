@@ -51,6 +51,34 @@ hang:
    hlt                          ; halt machine should kernel return
    jmp   hang                   ; course, this wont happen
 
+[GLOBAL memcpy]
+memcpy:
+	push ebp
+	; new stack frame
+	mov ebp, esp
+
+	; save regs
+	push esi
+	push edi
+
+	; destination -> edi
+	mov edi, [ebp + 8]
+	mov eax, edi ; save destination for return
+
+	; source -> esi, count -> ecx
+	mov esi, [ebp + 12]
+	mov ecx, [ebp + 16]
+
+	; do the copy (isn't x86 great?)
+	rep movsb
+	
+	; restore
+	pop edi
+	pop esi
+	pop ebp
+
+	ret
+
 section .bss
 align 32
 stack:

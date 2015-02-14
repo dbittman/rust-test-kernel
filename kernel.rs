@@ -9,6 +9,7 @@
 extern crate core;
 
 use prelude::*;
+use core::fmt::Writer;
 mod std {
     // #18491 - write!() expands to std::fmt::Arguments::new
     pub use core::fmt;
@@ -27,21 +28,21 @@ mod macros;
 
 // Prelude
 mod prelude;
+mod util;
 
 /// Exception handling (panic)
 pub mod unwind;
 
-mod logging;
+mod vga;
 
 #[lang="start"]
 #[no_mangle]
 pub fn kmain()
 {
-    static mut VGA: *mut u16 = 0xb8000 as *mut u16;
-    const COLOR: u16 = (0 << 12) | (15 << 8);
-    unsafe {
-        *VGA.offset(2 * 80 + 2) = 'A' as u16 | COLOR;
-    }
+    let mut d = vga::Display::new();
+    d.clear();
+    d.putch('A');
+    let _ = write!(&mut d, "test");
     loop {}
 }
 

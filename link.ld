@@ -18,6 +18,7 @@ SECTIONS
     .data :
     {
         data = .; _data = .; __data = .;
+		*(.padata .padata.*)
         *(.data .data.*)
         *(.rodata .rodata.*)
         . = ALIGN(4096);

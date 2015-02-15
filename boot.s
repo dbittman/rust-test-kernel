@@ -79,6 +79,24 @@ memcpy:
 
 	ret
 
+[GLOBAL reload_segments]
+reload_segments:
+	push ebp
+	mov ebp, esp
+
+	xchg bx, bx
+	jmp 0x08:__RS_reload_cs
+	__RS_reload_cs:
+	mov ax, 0x10
+	mov ds, ax
+	mov ss, ax
+	mov fs, ax
+	mov es, ax
+	mov gs, ax
+
+	pop ebp
+	ret
+
 section .bss
 align 32
 stack:

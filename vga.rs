@@ -71,12 +71,3 @@ impl fmt::Writer for Display
     }
 }
 
-pub fn test() {
-    let mut d = Display::new();
-    d.clear();
-    loop {
-    d.putch('A');
-    d.putch('B');
-    }
-}
-

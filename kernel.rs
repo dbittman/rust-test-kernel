@@ -1,9 +1,10 @@
 #![no_std]  //< Kernels can't use std
+#![allow(unstable)]
+#![allow(unused_imports)]
 #![allow(unknown_features)]
 #![feature(lang_items)] //< unwind needs to define lang items
 #![feature(asm)]    //< As a kernel, we need inline assembly
 #![feature(core)]   //< libcore (see below) is not yet stablized
-
 
 #[macro_use]
 extern crate core;
@@ -22,10 +23,6 @@ mod std {
     pub use core::marker;
 }
 
-
-#[macro_use]
-mod macros;
-
 // Prelude
 mod prelude;
 mod util;
@@ -34,6 +31,8 @@ mod util;
 pub mod unwind;
 
 mod vga;
+mod x86_tables;
+
 
 #[lang="start"]
 #[no_mangle]
@@ -41,8 +40,10 @@ pub fn kmain()
 {
     let mut d = vga::Display::new();
     d.clear();
-    d.putch('A');
-    let _ = write!(&mut d, "test");
+    let _ = write!(&mut d, "test {}", 5);
+    
+    x86_tables::gdt_init();
+
     loop {}
 }
 

@@ -6,6 +6,7 @@
 #![feature(lang_items)] //< unwind needs to define lang items
 #![feature(asm)]    //< As a kernel, we need inline assembly
 #![feature(core)]   //< libcore (see below) is not yet stablized
+#![allow(unused_unsafe)]
 #[macro_use]
 extern crate core;
 

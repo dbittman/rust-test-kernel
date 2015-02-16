@@ -17,7 +17,7 @@ use vga::*;
 pub fn rust_begin_unwind(args: ::core::fmt::Arguments, file: &str, line: usize) -> !
 {
 	// 'args' will print to the formatted string passed to panic!
-	write!(&mut ::vga::Display::new(), "file='{}', line={} :: {}", file, line, args);
+	print!("file='{}', line={} :: {}", file, line, args);
 	loop {}
 }
 

@@ -1,7 +1,7 @@
 AOBJ=boot.o int.o
 ROBJ=kernel.o
 
-OBJ=$(AOBJ) $(ROBJ)
+OBJ=$(ROBJ) $(AOBJ)
 
 CFLAGS=-std=gnu99 -Wall -Wextra -pedantic -O0 -m32
 

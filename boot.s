@@ -79,12 +79,24 @@ memcpy:
 
 	ret
 
+[GLOBAL memset]
+memset:
+	push edi
+	mov ecx, [esp + 16]
+	mov al, [esp + 12]
+	mov edi, [esp + 8]
+
+	rep stosb
+
+	mov eax, [esp + 8]
+	pop edi
+	ret
+
 [GLOBAL reload_segments]
 reload_segments:
 	push ebp
 	mov ebp, esp
 
-	xchg bx, bx
 	jmp 0x08:__RS_reload_cs
 	__RS_reload_cs:
 	mov ax, 0x10

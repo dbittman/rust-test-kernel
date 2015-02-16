@@ -1,26 +1,98 @@
-isr_handler:
-	cli
+
+%macro INT_NOERRORCODE 1
+	align 8
+	global int%1_entry
+	int%1_entry:
+		cli
+		push byte 0
+		push byte %1
+		jmp int_common_entry
+%endmacro
+
+%macro INT_ERRORCODE 1
+	align 8
+	global int%1_entry
+	int%1_entry:
+		cli
+		push byte %1
+		jmp int_common_entry
+%endmacro
+
+extern interrupt_handler
+int_common_entry:
 	pusha
 
+	xor eax, eax
 	mov ax, ds
-	push ds
+	push eax
 	
+	xchg bx, bx
 	mov ax, 0x10
 	mov ds, ax
 	mov ss, ax
 	mov gs, ax
 	mov fs, ax
 
-	; call c code
+	; call rust code
+	call interrupt_handler
 
 	; pop ebp
-	pop ax
-	mov ds, ax
-	mov ss, ax
-	mov gs, ax
-	mov fs, ax
+	pop ebx
+	mov ds, bx
+	mov ss, bx
+	mov gs, bx
+	mov fs, bx
 
 	popa
-	sti
-	iret
+	add esp, 8
+	iretd
+
+INT_NOERRORCODE 0
+INT_NOERRORCODE 1
+INT_NOERRORCODE 2
+INT_NOERRORCODE 3
+INT_NOERRORCODE 4
+INT_NOERRORCODE 5
+INT_NOERRORCODE 6
+INT_NOERRORCODE 7
+INT_ERRORCODE   8
+INT_NOERRORCODE 9
+INT_ERRORCODE   10
+INT_ERRORCODE   11
+INT_ERRORCODE   12
+INT_ERRORCODE   13
+INT_ERRORCODE   14
+INT_NOERRORCODE 15
+INT_NOERRORCODE 16
+INT_NOERRORCODE 17
+INT_NOERRORCODE 18
+INT_NOERRORCODE 19
+INT_NOERRORCODE 20
+INT_NOERRORCODE 21
+INT_NOERRORCODE 22
+INT_NOERRORCODE 23
+INT_NOERRORCODE 24
+INT_NOERRORCODE 25
+INT_NOERRORCODE 26
+INT_NOERRORCODE 27
+INT_NOERRORCODE 28
+INT_NOERRORCODE 29
+INT_NOERRORCODE 30
+INT_NOERRORCODE 31
+INT_NOERRORCODE 32
+INT_NOERRORCODE 33
+INT_NOERRORCODE 34
+INT_NOERRORCODE 35
+INT_NOERRORCODE 36
+INT_NOERRORCODE 37
+INT_NOERRORCODE 38
+INT_NOERRORCODE 39
+INT_NOERRORCODE 40
+INT_NOERRORCODE 41
+INT_NOERRORCODE 42
+INT_NOERRORCODE 43
+INT_NOERRORCODE 44
+INT_NOERRORCODE 45
+INT_NOERRORCODE 46
+INT_NOERRORCODE 47
 

@@ -2,10 +2,10 @@
 #![allow(unstable)]
 #![allow(unused_imports)]
 #![allow(unknown_features)]
+#![allow(dead_code)]
 #![feature(lang_items)] //< unwind needs to define lang items
 #![feature(asm)]    //< As a kernel, we need inline assembly
 #![feature(core)]   //< libcore (see below) is not yet stablized
-
 #[macro_use]
 extern crate core;
 
@@ -27,23 +27,29 @@ mod std {
 mod prelude;
 mod util;
 
+
+#[macro_use]
+mod vga;
 /// Exception handling (panic)
 pub mod unwind;
-
-mod vga;
-mod x86_tables;
-
+pub mod x86_tables;
 
 #[lang="start"]
 #[no_mangle]
 pub fn kmain()
 {
-    let mut d = vga::Display::new();
+    let d = vga::Display::new();
     d.clear();
-    let _ = write!(&mut d, "test {}", 5);
-    
-    x86_tables::gdt_init();
 
+    print!("Hello World");
+    
+    unsafe {
+    x86_tables::cli();
+    x86_tables::gdt_init();
+    x86_tables::idt_init();
+    x86_tables::pic_init();
+    x86_tables::sti();
+    }
     loop {}
 }
 

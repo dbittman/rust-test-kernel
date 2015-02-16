@@ -10,6 +10,8 @@ pub struct Display {
     screen: *mut u16
 }
 
+pub static mut mainscreen: Display = Display { x:0, y:0, screen:0xb8000 as *mut u16 };
+
 impl Display {
     pub fn new() -> Display {
         Display {x:0, y:0, screen:0xb8000 as *mut u16}
@@ -69,5 +71,14 @@ impl fmt::Writer for Display
         }
         Ok( () )
     }
+}
+
+macro_rules! print {
+    ( $($arg:tt)* ) => ({
+        use core::fmt::Writer;
+        unsafe {
+            let _ = write!(&mut ::vga::mainscreen, $($arg)*);
+        }
+    })
 }
 

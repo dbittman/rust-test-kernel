@@ -33,7 +33,11 @@ mod util;
 mod vga;
 /// Exception handling (panic)
 pub mod unwind;
+mod io;
 pub mod x86_tables;
+pub mod interrupt;
+pub mod keyboard;
+mod timer;
 
 #[lang="start"]
 #[no_mangle]
@@ -42,14 +46,22 @@ pub fn kmain()
     let d = vga::Display::new();
     d.clear();
 
-    print!("Hello World");
-    
+    print!("Hello World\n");
+    /* TODO:
+     * Interface with Go?
+     * More OS features?
+     * Fix unwind code...make panic! work
+     * Implement x86 exceptions
+     * Cleanup and comments
+     */
     unsafe {
-    x86_tables::cli();
-    x86_tables::gdt_init();
-    x86_tables::idt_init();
-    x86_tables::pic_init();
-    x86_tables::sti();
+        interrupt::cli();
+        x86_tables::gdt_init();
+        x86_tables::idt_init();
+        x86_tables::pic_init();
+        timer::init();
+        keyboard::keyboard_init();
+        interrupt::sti();
     }
     loop {}
 }

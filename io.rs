@@ -1,4 +1,4 @@
-
+/* these are some handy x86 functions that do important, manipulat-y hardware-y things */
 pub unsafe fn outportb(port: u16, val: u8)
 {
     asm!("outb %al, %dx" : : "{dx}"(port), "{al}"(val));

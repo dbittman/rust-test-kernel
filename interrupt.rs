@@ -1,4 +1,7 @@
 use io::{outportb,inportb};
+
+/* This structure is what is on the stack at the time the interrupt is received by the
+ * rust code. This is accomplished through some magic x86 calling conventions */
 #[derive(Copy)]
 #[repr(C, packed)]
 pub struct Registers {
@@ -8,17 +11,17 @@ pub struct Registers {
     eip: u32, cs: u32, eflags: u32, useresp: u32, ss: u32
 }
 
-static mut ints: u32 = 0;
 fn interrupt_unhandled(regs: Registers) {
     print!("unhandled interrupt: {}\n", regs.int_num);
 }
 
 static mut interrupt_table: [fn(Registers); 16] = [interrupt_unhandled; 16];
 
-#[no_mangle]
+/* General interrupt handler. If it's >= 32, then it's an external interrupt (like
+ * the keyboard). If it isn't, then it's an exception (like divide by zero) */
+#[no_mangle] //need no_mangle because this is called from assembly code
 pub unsafe extern "C" fn interrupt_handler(regs: Registers)
 {
-    ints += 1;
     if regs.int_num >= 32 {
         let irq: usize = regs.int_num as usize - 32;
         interrupt_table[irq](regs);

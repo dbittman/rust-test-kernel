@@ -1,5 +1,7 @@
 use io::*;
 use interrupt::*;
+/* the keyboard gives us a a number that isn't ascii (there are non-ascii keys
+ * on the keyboard). This array maps the keyboard's scancode to characters */
 static KEYMAP: [u8; 79] = [
     0, 27,
     '1' as u8, '2' as u8, '3' as u8, '4' as u8, '5' as u8, '6' as u8, '7' as u8, '8' as u8, /* 9 */
@@ -29,14 +31,13 @@ static KEYMAP: [u8; 79] = [
     0,
     0,  /* Right Arrow */
     '+' as u8,
-    ];  
-
-
+];  
 
 pub fn keyboard(regs: Registers) {
     unsafe {
         let scancode: u8 = ::io::inportb(0x60);
         if (scancode & 0x80) == 0 {
+            // echo the key
             print!("{}", KEYMAP[scancode as usize] as char);
         }
     }

@@ -33,6 +33,7 @@ static KEYMAP: [u8; 79] = [
     '+' as u8,
 ];  
 
+#[allow(unused_variables)]
 pub fn keyboard(regs: Registers) {
     unsafe {
         let scancode: u8 = ::io::inportb(0x60);
@@ -43,8 +44,8 @@ pub fn keyboard(regs: Registers) {
     }
 }
 
-pub fn keyboard_init()
+pub fn init()
 {
-    ::interrupt::interrupt_register_handler(1, keyboard);
+    ::interrupt::register_handler(1, keyboard);
 }
 

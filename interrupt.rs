@@ -35,20 +35,20 @@ pub unsafe extern "C" fn interrupt_handler(regs: Registers)
     }
 }
 
-pub fn interrupt_register_handler(index: usize, handler: fn(Registers))
+pub fn register_handler(index: usize, handler: fn(Registers))
 {
     unsafe {
         interrupt_table[index] = handler;
     }
 }
 
-pub unsafe fn sti()
+pub fn sti()
 {
-    asm!("sti");
+    unsafe{ asm!("sti") };
 }
 
-pub unsafe fn cli()
+pub fn cli()
 {
-    asm!("cli");
+    unsafe{ asm!("cli") };
 }
 

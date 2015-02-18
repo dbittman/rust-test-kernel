@@ -1,52 +1,56 @@
-#![no_std]  //< Kernels can't use std
+#![no_std]
 #![allow(unstable)]
 #![allow(unused_imports)]
 #![allow(unknown_features)]
 #![allow(dead_code)]
-#![feature(lang_items)] //< unwind needs to define lang items
-#![feature(asm)]    //< As a kernel, we need inline assembly
-#![feature(core)]   //< libcore (see below) is not yet stablized
+#![feature(lang_items)]
+#![feature(asm)]
+#![feature(core)]
 #![allow(unused_unsafe)]
+#![feature(box_syntax)]
 #[macro_use]
 extern crate core;
 
 use prelude::*;
 use core::fmt::Writer;
 mod std {
-    // #18491 - write!() expands to std::fmt::Arguments::new
     pub use core::fmt;
-    // #16803 - #[derive] references std::cmp
     pub use core::cmp;
-    // ??? - For loops reference std
     pub use core::iter;
     pub use core::option;
-    // ??? - Derive references marker/ops
     pub use core::marker;
 }
 
 // Prelude
 mod prelude;
 mod util;
-
+mod allocator;
+mod boxed;
 
 #[macro_use]
 mod vga;
-/// Exception handling (panic)
-pub mod unwind;
+mod unwind;
 mod io;
-pub mod x86_tables;
+mod x86;
+
+// This needs to be public because it exports a function that gets called by assembly code
 pub mod interrupt;
-pub mod keyboard;
+
+mod keyboard;
 mod timer;
 
 #[lang="start"]
 #[no_mangle]
 pub fn kmain()
 {
-    let d = vga::Display::new();
-    d.clear();
+    /* make sure we've got interrupts disabled while we set things up */
+    interrupt::cli();
+    /* initialize the memory allocator */
+    allocator::init();
 
-    print!("Hello World\n");
+    /* clear the screen and print a message */
+    vga::Display::new().clear();
+    print!("Hello World from Rust!\n");
     /* TODO:
      * Interface with Go?
      * More OS features?
@@ -54,15 +58,17 @@ pub fn kmain()
      * Implement x86 exceptions
      * Cleanup and comments
      */
-    unsafe {
-        interrupt::cli();
-        x86_tables::gdt_init();
-        x86_tables::idt_init();
-        x86_tables::pic_init();
-        timer::init();
-        keyboard::keyboard_init();
-        interrupt::sti();
-    }
+
+    /* initialize CPU things (GDT, IDT, etc) */
+    x86::initialize_processor();
+    timer::init();
+    keyboard::init();
+    
+    /* and start firing off interrupts */
+    print!("Done booting up!\n");
+    interrupt::sti();
+
+    /* loop forever, handling interrupts */
     loop {}
 }
 

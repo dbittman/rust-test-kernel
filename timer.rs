@@ -3,6 +3,7 @@ use interrupt::*;
 use vga::*;
 static mut ticks: usize = 0;
 
+#[allow(unused_variables)]
 pub fn timer_tick(regs: Registers)
 {
     unsafe {
@@ -15,6 +16,6 @@ pub fn timer_tick(regs: Registers)
 
 pub fn init()
 {
-    ::interrupt::interrupt_register_handler(0, timer_tick);
+    ::interrupt::register_handler(0, timer_tick);
 }
 

@@ -1,23 +1,13 @@
-/*
- * Rust BareBones OS
- * - By John Hodge (Mutabah/thePowersGang) 
- *
- * unwind.rs
- * - Stack unwind (panic) handling
- *
- * == LICENCE ==
- * This code has been put into the public domain, there are no restrictions on
- * its use, and the author takes no liability.
- */
 use prelude::*;
-use core::fmt::Writer;
 use vga::*;
+use interrupt::*;
 #[lang="panic_fmt"]
 #[no_mangle]
+#[allow(unused_variables)]
 pub fn rust_begin_unwind(args: ::core::fmt::Arguments, file: &str, line: usize) -> !
 {
-	// 'args' will print to the formatted string passed to panic!
-    print!("file='{}', line={} :: {}", file, line, args);
+	unsafe { ::interrupt::cli() };
+    print!("KERNEL PANIC\n");
 	loop {}
 }
 
@@ -27,7 +17,6 @@ pub fn __morestack() -> !
 {
 	loop {}
 }
-
 
 #[allow(non_camel_case_types)]
 #[repr(C)]
@@ -70,13 +59,6 @@ pub fn rust_eh_personality(
 	_version: isize, _actions: _Unwind_Action, _exception_class: u64,
 	_exception_object: &_Unwind_Exception, _context: &_Unwind_Context
 	) -> _Unwind_Reason_Code
-{
-	loop{}
-}
-
-#[no_mangle]
-#[allow(non_snake_case)]
-pub fn _Unwind_Resume()
 {
 	loop{}
 }

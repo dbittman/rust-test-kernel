@@ -8,6 +8,7 @@
 #![feature(core)]
 #![allow(unused_unsafe)]
 #![feature(box_syntax)]
+#![no_builtins]
 #[macro_use]
 extern crate core;
 
@@ -23,7 +24,7 @@ mod std {
 
 // Prelude
 mod prelude;
-mod util;
+pub mod util;
 mod allocator;
 mod boxed;
 
@@ -66,6 +67,7 @@ pub fn kmain()
     
     /* and start firing off interrupts */
     print!("Done booting up!\n");
+//    loop {}
     interrupt::sti();
 
     /* loop forever, handling interrupts */

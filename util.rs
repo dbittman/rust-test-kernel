@@ -1,5 +1,5 @@
 use prelude::*;
-
+#[no_mangle]
 pub unsafe fn memset(s: *mut u8, c: i32, n: usize) -> *mut u8
 {
     let mut i = 0;
@@ -27,6 +27,8 @@ pub unsafe extern fn memmove(dest: *mut u8, src: *const u8,
     }
     return dest;
 }
+
+#[no_mangle]
 pub unsafe extern fn memcpy(dest: *mut u8, src: *const u8,
                             n: usize) -> *mut u8 {
     let mut i = 0;

@@ -59,6 +59,8 @@ struct idt_ptr {
     length: u16,
     table: *const [u64],
 }
+
+#[inline(never)]
 pub unsafe fn idt_write_entry(idx: u8, vector: unsafe extern fn())
 {
     let addr: u32 = ::core::mem::transmute(vector);
@@ -68,6 +70,7 @@ pub unsafe fn idt_write_entry(idx: u8, vector: unsafe extern fn())
         /* bits 32..40 are always zero */
         ((0x8E as u64) << 40) |
         (((addr >> 16) & 0xFFFF) as u64) << 48;
+    print!("got {:x}\n", idt[idx as usize] as u32);
 }
 
 pub unsafe fn idt_init()

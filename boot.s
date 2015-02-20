@@ -51,47 +51,6 @@ hang:
    hlt                          ; halt machine should kernel return
    jmp   hang                   ; course, this wont happen
 
-[GLOBAL memcpy]
-memcpy:
-	push ebp
-	; new stack frame
-	mov ebp, esp
-
-	; save regs
-	push esi
-	push edi
-
-	; destination -> edi
-	mov edi, [ebp + 8]
-	mov eax, edi ; save destination for return
-
-	; source -> esi, count -> ecx
-	mov esi, [ebp + 12]
-	mov ecx, [ebp + 16]
-
-	; do the copy (isn't x86 great?)
-	rep movsb
-	
-	; restore
-	pop edi
-	pop esi
-	pop ebp
-
-	ret
-
-[GLOBAL memset]
-memset:
-	push edi
-	mov ecx, [esp + 16]
-	mov al, [esp + 12]
-	mov edi, [esp + 8]
-
-	rep stosb
-
-	mov eax, [esp + 8]
-	pop edi
-	ret
-
 [GLOBAL reload_segments]
 reload_segments:
 	push ebp
@@ -109,7 +68,7 @@ reload_segments:
 	pop ebp
 	ret
 
-section .bss
+section .bss.stack
 align 32
 stack:
    resb STACKSIZE               ; reserve 16k stack on a quadword boundary

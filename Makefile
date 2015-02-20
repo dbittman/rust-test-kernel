@@ -5,7 +5,7 @@ OBJ=$(ROBJ) $(AOBJ)
 
 CFLAGS=-std=gnu99 -Wall -Wextra -pedantic -O0 -m32
 
-RFLAGS := --cfg arch__x86 --target=target.json -C opt-level=0 -C no-stack-check -g
+RFLAGS := --cfg arch__x86 --target=target.json -C opt-level=3 -C no-stack-check -g
 
 
 all: k.elf

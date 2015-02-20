@@ -67,7 +67,6 @@ pub fn kmain()
     
     /* and start firing off interrupts */
     print!("Done booting up!\n");
-//    loop {}
     interrupt::sti();
 
     /* loop forever, handling interrupts */

@@ -51,6 +51,27 @@ hang:
    hlt                          ; halt machine should kernel return
    jmp   hang                   ; course, this wont happen
 
+align 32
+idtp:
+	dw 1
+	dd 1
+
+[GLOBAL load_idt]
+extern idt
+load_idt:
+	xchg bx, bx
+	push ebp
+	mov ebp, esp
+	mov eax, [ebp+12]
+	mov ecx, [ebp+8]
+	mov word [idtp], ax
+	mov dword [idtp+2], ecx
+
+	lidt [idtp]
+
+	pop ebp
+	ret
+
 [GLOBAL reload_segments]
 reload_segments:
 	push ebp
@@ -68,7 +89,7 @@ reload_segments:
 	pop ebp
 	ret
 
-section .bss.stack
+section .bss
 align 32
 stack:
    resb STACKSIZE               ; reserve 16k stack on a quadword boundary

@@ -36,6 +36,7 @@ pub static mut gdt: [gdt_desc; 3] = [
 // This is defined in boot.s
 extern "C" {
     fn reload_segments();
+    fn load_idt(x: u32, y: u32);
     fn int32_entry();
     fn int33_entry();
 }
@@ -53,14 +54,6 @@ pub unsafe fn gdt_init()
 
 pub static mut idt: [u64; 256] = [0; 256];
 
-// This one for sure needs to be packed because it starts with a u16!!
-#[repr(C, packed)]
-struct idt_ptr {
-    length: u16,
-    table: *const [u64],
-}
-
-#[inline(never)]
 pub unsafe fn idt_write_entry(idx: u8, vector: unsafe extern fn())
 {
     let addr: u32 = ::core::mem::transmute(vector);
@@ -70,18 +63,13 @@ pub unsafe fn idt_write_entry(idx: u8, vector: unsafe extern fn())
         /* bits 32..40 are always zero */
         ((0x8E as u64) << 40) |
         (((addr >> 16) & 0xFFFF) as u64) << 48;
-    print!("got {:x}\n", idt[idx as usize] as u32);
 }
 
 pub unsafe fn idt_init()
 {
     idt_write_entry(32, int32_entry);
     idt_write_entry(33, int33_entry);
-    let p: idt_ptr = idt_ptr {
-        table: &idt,
-        length: 16383
-    };
-    asm!("lidt ($0)" :: "r"(&p as *const idt_ptr));
+    load_idt(::core::mem::transmute(&idt as *const [u64; 256]), 16383);
 }
 
 pub unsafe fn pic_init()

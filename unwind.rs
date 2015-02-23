@@ -13,7 +13,7 @@ pub fn rust_begin_unwind(args: ::core::fmt::Arguments, file: &str, line: usize) 
 
 #[lang="stack_exhausted"]
 #[no_mangle]
-pub fn __morestack() -> !
+pub fn __morestack()
 {
 	loop {}
 }

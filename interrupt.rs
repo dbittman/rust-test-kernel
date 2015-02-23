@@ -30,7 +30,7 @@ pub unsafe extern "C" fn interrupt_handler(regs: Registers)
         }
         outportb(0x20, 0x20);
     } else {
-        print!("EXCEPTION");
+        print!("EXCEPTION {}", regs.int_num);
         asm!("hlt");
     }
 }

@@ -39,6 +39,39 @@ extern "C" {
     fn load_idt(x: u32, y: u32);
     fn int32_entry();
     fn int33_entry();
+    fn int_entry();
+    fn int0_entry();
+    fn int1_entry();
+    fn int2_entry();
+    fn int3_entry();
+    fn int4_entry();
+    fn int5_entry();
+    fn int6_entry();
+    fn int7_entry();
+    fn int8_entry();
+    fn int9_entry();
+    fn int10_entry();
+    fn int11_entry();
+    fn int12_entry();
+    fn int13_entry();
+    fn int14_entry();
+    fn int15_entry();
+    fn int16_entry();
+    fn int17_entry();
+    fn int18_entry();
+    fn int19_entry();
+    fn int20_entry();
+    fn int21_entry();
+    fn int22_entry();
+    fn int23_entry();
+    fn int24_entry();
+    fn int25_entry();
+    fn int26_entry();
+    fn int27_entry();
+    fn int28_entry();
+    fn int29_entry();
+    fn int30_entry();
+    fn int31_entry();
 }
 
 pub unsafe fn gdt_init()
@@ -52,6 +85,7 @@ pub unsafe fn gdt_init()
     reload_segments();
 }
 
+#[no_mangle]
 pub static mut idt: [u64; 256] = [0; 256];
 
 pub unsafe fn idt_write_entry(idx: u8, vector: unsafe extern fn())
@@ -69,6 +103,38 @@ pub unsafe fn idt_init()
 {
     idt_write_entry(32, int32_entry);
     idt_write_entry(33, int33_entry);
+    idt_write_entry(0, int0_entry);
+    idt_write_entry(1, int1_entry);
+    idt_write_entry(2, int2_entry);
+    idt_write_entry(3, int3_entry);
+    idt_write_entry(4, int4_entry);
+    idt_write_entry(5, int5_entry);
+    idt_write_entry(6, int6_entry);
+    idt_write_entry(7, int7_entry);
+    idt_write_entry(8, int8_entry);
+    idt_write_entry(9, int9_entry);
+    idt_write_entry(10, int10_entry);
+    idt_write_entry(11, int11_entry);
+    idt_write_entry(12, int12_entry);
+    idt_write_entry(13, int13_entry);
+    idt_write_entry(14, int14_entry);
+    idt_write_entry(15, int15_entry);
+    idt_write_entry(16, int16_entry);
+    idt_write_entry(17, int17_entry);
+    idt_write_entry(18, int18_entry);
+    idt_write_entry(19, int19_entry);
+    idt_write_entry(20, int20_entry);
+    idt_write_entry(21, int21_entry);
+    idt_write_entry(22, int22_entry);
+    idt_write_entry(23, int23_entry);
+    idt_write_entry(24, int24_entry);
+    idt_write_entry(25, int25_entry);
+    idt_write_entry(26, int26_entry);
+    idt_write_entry(27, int27_entry);
+    idt_write_entry(28, int28_entry);
+    idt_write_entry(29, int29_entry);
+    idt_write_entry(30, int30_entry);
+    idt_write_entry(31, int31_entry);
     load_idt(::core::mem::transmute(&idt as *const [u64; 256]), 16383);
 }
 

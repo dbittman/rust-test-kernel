@@ -26,7 +26,6 @@ int_common_entry:
 	mov ax, ds
 	push eax
 	
-	xchg bx, bx
 	mov ax, 0x10
 	mov ds, ax
 	mov ss, ax

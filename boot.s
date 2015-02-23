@@ -59,7 +59,6 @@ idtp:
 [GLOBAL load_idt]
 extern idt
 load_idt:
-	xchg bx, bx
 	push ebp
 	mov ebp, esp
 	mov eax, [ebp+12]

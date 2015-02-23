@@ -52,21 +52,14 @@ pub fn kmain()
     /* clear the screen and print a message */
     vga::Display::new().clear();
     print!("Hello World from Rust!\n");
-    /* TODO:
-     * Interface with Go?
-     * More OS features?
-     * Fix unwind code...make panic! work
-     * Implement x86 exceptions
-     * Cleanup and comments
-     */
-
+    
     /* initialize CPU things (GDT, IDT, etc) */
     x86::initialize_processor();
     timer::init();
     keyboard::init();
     
-    /* and start firing off interrupts */
     print!("Done booting up!\n");
+    /* and start firing off interrupts */
     interrupt::sti();
 
     /* loop forever, handling interrupts */

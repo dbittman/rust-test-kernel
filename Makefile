@@ -1,7 +1,8 @@
 AOBJ=boot.o int.o
 ROBJ=kernel.o
+#GOBJ=gotest.o
 
-OBJ=$(ROBJ) $(AOBJ)
+OBJ=$(ROBJ) $(GOBJ) $(AOBJ)
 
 CFLAGS=-std=gnu99 -Wall -Wextra -pedantic -O0 -m32
 
@@ -29,6 +30,9 @@ test:
 
 %.o : %.rs Makefile libcore.rlib
 	rustc ${RFLAGS} --emit=obj,dep-info $< --extern core=libcore.rlib
+
+gotest.o: gotest.go
+	gccgo -nostdlib -g -static gotest.go -c -o gotest.o -m32 -nostartfiles
 
 libcore.rlib: ../rust/src/libcore/lib.rs
 	rustc ${RFLAGS} --crate-type=lib,staticlib --emit=link,dep-info ../rust/src/libcore/lib.rs

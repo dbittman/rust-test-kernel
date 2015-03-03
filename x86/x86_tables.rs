@@ -101,8 +101,6 @@ pub unsafe fn idt_write_entry(idx: u8, vector: unsafe extern fn())
 
 pub unsafe fn idt_init()
 {
-    idt_write_entry(32, int32_entry);
-    idt_write_entry(33, int33_entry);
     idt_write_entry(0, int0_entry);
     idt_write_entry(1, int1_entry);
     idt_write_entry(2, int2_entry);
@@ -135,6 +133,8 @@ pub unsafe fn idt_init()
     idt_write_entry(29, int29_entry);
     idt_write_entry(30, int30_entry);
     idt_write_entry(31, int31_entry);
+    idt_write_entry(32, int32_entry);
+    idt_write_entry(33, int33_entry);
     load_idt(::core::mem::transmute(&idt as *const [u64; 256]), 16383);
 }
 

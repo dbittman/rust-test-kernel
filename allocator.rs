@@ -6,9 +6,9 @@ static mut allocator_end: u32 = 0;
 
 #[lang="exchange_malloc"]
 unsafe fn kmalloc(size: usize, align: usize) -> *mut u8 {
-    let aligned_size: u32 = ((size & !(align-1)) + align) as u32;
-    let ret = allocator_end;
-    allocator_end += aligned_size;
+    let aligned_size: u32 = (size + align) as u32;
+    let ret = (allocator_end & !(align as u32 - 1)) + align as u32;
+    allocator_end = ret + aligned_size;
     return ret as *mut u8;
 }
 

@@ -1,6 +1,6 @@
 AOBJ=boot.o int.o
 ROBJ=kernel.o
-#GOBJ=gotest.o
+GOBJ=gotest.o
 
 OBJ=$(ROBJ) $(GOBJ) $(AOBJ)
 

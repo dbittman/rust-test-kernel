@@ -1,3 +1,4 @@
+#![feature(no_std)]
 #![no_std]
 #![allow(unstable)]
 #![allow(unused_imports)]
@@ -61,7 +62,6 @@ pub fn kmain()
     print!("Done booting up!\n");
     /* and start firing off interrupts */
     interrupt::sti();
-
     /* loop forever, handling interrupts */
     loop {}
 }

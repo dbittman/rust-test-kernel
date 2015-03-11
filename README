@@ -8,7 +8,7 @@ should look like:
 
 <dir>
   |
-  +-cmps112-proj/
+  +-rust-test-kernel/
   |
   +-rust/
 
@@ -29,5 +29,5 @@ get a "no such file or directory", you're missing the 32-bit linux elf loader.
 
 I tested the kernel with Qemu in KVM mode.
 
-Running make all test should compile the kernel and start qemu.
+Running make all test should compile the kernel and start qemu, if you have qemu installed.
 

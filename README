@@ -1,2 +1,33 @@
 This is my project for CMPS112 at UCSC. It is a simple kernel written in Rust.
 
+COMPILE INSTRUCTIONS
+--------------------
+In order to compile, the kernel needs access to the rust source tree. Check out the rust
+source code from github and place it in the directory above this one. The directory layout
+should look like:
+
+<dir>
+  |
+  +-cmps112-proj/
+  |
+  +-rust/
+
+The rust source code must be checked out as branch beta. The rust compiler that you use
+to compile the kernel must be version alpha 1. Any other version is UNTESTED and PROBABLY
+WILL NOT WORK.
+
+After the kernel compiles, it will create a hard drive image. This may require sudo access
+on your system, as it calls a partitioning program (sfdisk) to partition the disk image. This
+was tested on Arch Linux on Feb 25th, 2015.
+
+The kernel is loaded with grub legacy, so it needs to run grub in order to install the
+bootloader. You probably don't have grub legacy installed (if you do, it doesn't matter).
+Because of this, I have included a binary of grub legacy. It is a 32-bit binary! This means
+that if you're on a 64-bit system you NEED TO HAVE 32-bit LIBRARIES INSTALLED OR IT WILL NOT
+RUN. I recommend trying to run the binary to make sure it'll work (tools/bin/grub). If you
+get a "no such file or directory", you're missing the 32-bit linux elf loader.
+
+I tested the kernel with Qemu in KVM mode.
+
+Running make all test should compile the kernel and start qemu.
+

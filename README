@@ -27,7 +27,13 @@ that if you're on a 64-bit system you NEED TO HAVE 32-bit LIBRARIES INSTALLED OR
 RUN. I recommend trying to run the binary to make sure it'll work (tools/bin/grub). If you
 get a "no such file or directory", you're missing the 32-bit linux elf loader.
 
+In order to generate the hard disk image, run 'tools/chd.sh' with bash.
+
 I tested the kernel with Qemu in KVM mode.
 
 Running make all test should compile the kernel and start qemu, if you have qemu installed.
+
+Complete steps assuming everything is in the right place:
+sh tools/chd.sh
+make all test
 
